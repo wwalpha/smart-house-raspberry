@@ -1,0 +1,16 @@
+{
+  "name": "smart-house-raspberry",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "wwalpha <wwalpha@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/aws-iot-device-sdk": "^2.2.0",
+    "ts-lint": "^4.5.1",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "@types/node": "^12.0.10",
+    "aws-iot-device-sdk": "^2.2.1"
+  }
+}
