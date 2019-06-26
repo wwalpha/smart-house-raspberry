@@ -1,12 +1,7 @@
 import * as AWSIoT from 'aws-iot-device-sdk';
+import configs from './configs';
 
-const thingShadows = new AWSIoT.thingShadow({
-  keyPath: '<YourPrivateKeyPath>',
-  certPath: '<YourCertificatePath>',
-  caPath: '<YourRootCACertificatePath>',
-  clientId: '<YourUniqueClientIdentifier>',
-  host: '<YourCustomEndpoint>',
-});
+const shadow = new AWSIoT.thingShadow(configs);
 
 //
 // Client token value returned from thingShadows.update() operation
@@ -20,12 +15,12 @@ var rval = 187;
 var gval = 114;
 var bval = 222;
 
-thingShadows.on('connect', function() {
+shadow.on('connect', function() {
   //
   // After connecting to the AWS IoT platform, register interest in the
   // Thing Shadow named 'RGBLedLamp'.
   //
-  thingShadows.register('RGBLedLamp', {}, function() {
+  shadow.register('RGBLedLamp', {}, function() {
     // Once registration is complete, update the Thing Shadow named
     // 'RGBLedLamp' with the latest device state and save the clientToken
     // so that we can correlate it with status or timeout events.
@@ -34,7 +29,7 @@ thingShadows.on('connect', function() {
     //
     var rgbLedLampState = { state: { desired: { red: rval, green: gval, blue: bval } } };
 
-    clientTokenUpdate = thingShadows.update('RGBLedLamp', rgbLedLampState);
+    clientTokenUpdate = shadow.update('RGBLedLamp', rgbLedLampState);
     //
     // The update method returns a clientToken; if non-null, this value will
     // be sent in a 'status' event when the operation completes, allowing you
@@ -48,7 +43,8 @@ thingShadows.on('connect', function() {
     }
   });
 });
-thingShadows.on('status', function(thingName, stat, clientToken, stateObject) {
+
+shadow.on('status', function(thingName, stat, clientToken, stateObject) {
   console.log('received ' + stat + ' on ' + thingName + ': ' + JSON.stringify(stateObject));
   //
   // These events report the status of update(), get(), and delete()
@@ -59,11 +55,11 @@ thingShadows.on('status', function(thingName, stat, clientToken, stateObject) {
   //
 });
 
-thingShadows.on('delta', function(thingName, stateObject) {
+shadow.on('delta', function(thingName, stateObject) {
   console.log('received delta on ' + thingName + ': ' + JSON.stringify(stateObject));
 });
 
-thingShadows.on('timeout', function(thingName, clientToken) {
+shadow.on('timeout', function(thingName, clientToken) {
   console.log('received timeout on ' + thingName + ' with token: ' + clientToken);
   //
   // In the event that a shadow operation times out, you'll receive
