@@ -1,6 +1,6 @@
-import { change, skip } from './controllers/Channel';
-import { turnon, turnoff } from './controllers/Power';
-import { volume, mute } from './controllers/StepSpeaker';
+import { change, skip } from './alexa/tv/Channel';
+import { turnon, turnoff } from './alexa/tv/Power';
+import { volume, mute } from './alexa/tv/StepSpeaker';
 
 export const TOPICS: TopicType = {
   'iot/power/turnon': turnon,
