@@ -1,22 +1,12 @@
 import * as AWSIoT from 'aws-iot-device-sdk';
 import configs from './configs';
 import { Bravia } from 'typings/types';
+import { TOPICS } from './settings';
 
 const bravia = require('bravia');
-const client: Bravia = new bravia('172.16.81.25', 80, '0811');
+export const client: Bravia = new bravia('172.16.81.25', 80, '0811');
 
 const device = new AWSIoT.device(configs);
-
-type TopicType = {
-  [key: string]: () => Promise<void>;
-};
-
-const TOPICS: TopicType = {
-  'iot/power/turnon': () => client.send('WakeUp'),
-  'iot/power/turnoff': () => client.send('PowerOff'),
-  // 'iot/power/turnon': () => client.send('VolumeUp'),
-  // 'iot/power/turnoff': () => client.send('VolumeDown'),
-};
 
 device.on('connect', function() {
   console.log('connect');
@@ -27,5 +17,5 @@ device.on('message', async (topic, payload) => {
   console.log('message', topic, payload.toString());
 
   // コマンド実行する
-  await TOPICS[topic]();
+  await TOPICS[topic](JSON.parse(payload.toString()));
 });
