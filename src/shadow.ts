@@ -2,7 +2,7 @@ import * as AWSIoT from 'aws-iot-device-sdk';
 import configs from './configs';
 
 const shadow = new AWSIoT.thingShadow(configs);
-
+console.log(configs);
 //
 // Client token value returned from thingShadows.update() operation
 //
@@ -30,6 +30,7 @@ shadow.on('connect', function() {
     var rgbLedLampState = { state: { desired: { red: rval, green: gval, blue: bval } } };
 
     clientTokenUpdate = shadow.update('RGBLedLamp', rgbLedLampState);
+    console.log(clientTokenUpdate);
     //
     // The update method returns a clientToken; if non-null, this value will
     // be sent in a 'status' event when the operation completes, allowing you
